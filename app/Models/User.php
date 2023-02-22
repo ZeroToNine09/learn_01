@@ -72,4 +72,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Book::class, 'created_user_id');
     }
+
+    /**
+     * Return the user's roles
+     */
+    public function history(): HasMany
+    {
+        return $this->hasMany(History::class, 'user_id');
+    }
 }

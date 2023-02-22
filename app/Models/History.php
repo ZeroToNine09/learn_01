@@ -17,7 +17,7 @@ class History extends Model
     /**
      * Get the user that owns the History
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -27,7 +27,7 @@ class History extends Model
     /**
      * Get the book that owns the History
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function book(): BelongsTo
     {

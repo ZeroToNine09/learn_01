@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -21,7 +27,8 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
+     * @throws AuthorizationException
      */
     public function create()
     {
@@ -33,8 +40,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function store(Request $request)
     {
@@ -44,7 +52,7 @@ class UserController extends Controller
             $user = User::create($request->only(['name', 'email', 'password']));
             $user->roles()->sync($request->get('roles'));
             DB::commit();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             DB::rollback();
             throw $ex;
         }
@@ -56,7 +64,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -67,7 +75,8 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
+     * @throws AuthorizationException
      */
     public function edit($id)
     {
@@ -82,8 +91,8 @@ class UserController extends Controller
      *  Update the specified resource in storage.
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
@@ -100,7 +109,7 @@ class UserController extends Controller
             $user->update(array_filter($request->only(['name', 'email', 'password'])));
             $user->roles()->sync($request->get('roles'));
             DB::commit();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             DB::rollback();
             throw $ex;
         }
@@ -112,7 +121,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      * @param $id
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id): RedirectResponse
     {
@@ -123,8 +132,9 @@ class UserController extends Controller
         try {
             $user->roles()->detach();
             $user->delete();
+            $user->history()->delete();
             DB::commit();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             DB::rollback();
             throw $ex;
         }

@@ -2,26 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index(Request $request)
     {
         $title = $request->input('title', '');
 
-        $books = Book::where(function ($query) use ($title) {
-            if (!!$title) {
-                $query->where('title', $title);
-            }
-        })->get();
+        $books = Book::where('title', 'like', '%' . $title . '%')->get();
 
         return view('books.index', compact('books', 'title'));
     }
@@ -29,7 +31,7 @@ class BookController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -39,11 +41,14 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
+        unset($request['_token']);
+        $request['created_user_id'] = Auth::user()->id;
+        Book::insert($request->all());
         return redirect()->route('books.index');
     }
 
@@ -51,7 +56,7 @@ class BookController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -62,7 +67,7 @@ class BookController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function edit($id)
     {
@@ -76,13 +81,14 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
         $book = Book::find($id);
+        $book = $book->update($request->all());
 
         return redirect()->route('books.index');
     }
@@ -91,7 +97,7 @@ class BookController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

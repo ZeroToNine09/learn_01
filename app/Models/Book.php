@@ -17,7 +17,7 @@ class Book extends Model
     /**
      * Get all of the latestHistory for the Book
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function latestHistory(): HasMany
     {
