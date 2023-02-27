@@ -17,6 +17,13 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    public function showUsers()
+    {
+        $users = User::with('roles')->paginate(50);
+
+        return view('users.index', compact('users'));
+    }
+
     public function index()
     {
         $users = User::with('roles')->paginate(50);
