@@ -1,31 +1,31 @@
 ## Start server with laradock
-+ Tạo folder tên Interview:
++ Tạo folder tên learn:
 ```bash
-mkdir Interview
-cd Interview
+mkdir learn
+cd learn
 mkdir web
 ```
-+ Clone repository: (`laravel-interview-test-base.git` là tên repository của bạn)
++ Clone repository này về
 ```bash
 cd web
-git clone https://gitlab.com/JIL/laravel-interview-test-base.git
+git clone https://git.......
 ```
 + Clone laradock:
 ```bash
-cd Interview
+cd learn
 git clone https://github.com/laradock/laradock.git
 ```
 ```bash
 cd laradock
 ```
-+ Tìm và mở file `default.conf` trong folder laradock và copy nội dung bên dưới vào file `default.conf` (Chú ý tìm key `laravel-interview-test-base` và thay đổi thành tên project của bạn )
++ Tìm và mở file `default.conf` trong folder laradock và copy nội dung bên dưới vào file `default.conf` (Chú ý tìm key `__PROJECT_FOLDER__` và thay đổi thành tên project của bạn )
 ```bash
 server {
     listen 80;
     listen [::]:80;
 
     server_name localhost;
-    root /var/www/laravel-interview-test-base/public;
+    root /var/www/__PROJECT_FOLDER__/public;
     index index.php index.html index.htm;
 
     location / {
@@ -52,8 +52,8 @@ server {
         root /var/www/letsencrypt/;
         log_not_found off;
     }
-    error_log /var/log/nginx/interview_error.log;
-    access_log /var/log/nginx/interview_access.log;
+    error_log /var/log/nginx/learn_error.log;
+    access_log /var/log/nginx/learn_access.log;
 }
 
 ```
@@ -1125,10 +1125,10 @@ ONEDEV_HTTP_PORT=6610
 ONEDEV_SSH_PORT=6611
 
 ```
-+ Vào folder laravel-interview-test-base (`laravel-interview-test-base` là folder project của bạn)
++ Vào folder project của bạn
 
 ```bash
-cd laravel-interview-test-base
+cd _FOLDER_DỰ_ÁN_
 cp .env.example .env
 ```
 + Cấu hình connect db trong file `.env` theo cấu hình bên dưới:
@@ -1163,8 +1163,4 @@ npm run dev
 + Mở trình duyệt và chạy theo đường dẫn bên dưới:
 ```
 http://localhost/
-```
-***
-```
-Mở file REQUIREMENTS.md để đọc các yêu cầu
 ```
