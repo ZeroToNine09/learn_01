@@ -18,7 +18,8 @@ git clone https://github.com/laradock/laradock.git
 ```bash
 cd laradock
 ```
-+ Tìm và mở file `default.conf` trong folder laradock và copy nội dung bên dưới vào file `default.conf` (Chú ý tìm key `__PROJECT_FOLDER__` và thay đổi thành tên project của bạn )
++ Tìm và mở file `default.conf` trong folder laradock/nginx/sites và copy nội dung bên dưới vào file `default.conf` (Chú ý tìm key `__PROJECT_FOLDER__` và thay đổi thành tên project của bạn )
+
 ```bash
 server {
     listen 80;
@@ -1146,7 +1147,7 @@ cd laradock
 ```
 + Chạy lệnh dưới để khởi động nginx và mysql:
 ```bash
-docker-composer up -d nginx mysql
+docker-compose up -d nginx mysql
 ```
 + Login vào workspace:
 ```bash
@@ -1156,7 +1157,7 @@ docker-compose exec workspace bash
 ```bash
 composer install
 php artisan key:generate
-php artisan make:migrate
+php artisan migrate
 php artisan db:seed
 npm run dev
 ```
